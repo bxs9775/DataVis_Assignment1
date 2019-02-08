@@ -38,11 +38,7 @@ let chartTypes = {
         .append('rect')
         .attr('x', 80)
         .attr('y', (d) => yScale(this.getDataY(d)))
-        .attr('width', (d) => {
-          var w = this.getDataX(d);
-          console.log(w);
-          return xScale(w);
-        })
+        .attr('width', (d) => xScale(this.getDataX(d)))
         .attr('height', this.barHeight)
         .attr('fill', this.color);
       
@@ -73,7 +69,7 @@ let chartTypes = {
     };
   }
 };
-
+/*
 function makeBarChart(chart, dataset, color, getDataX, getDataY, xMin, xMax){
   
   let w = 1200;
@@ -124,11 +120,7 @@ function makeBarChart(chart, dataset, color, getDataX, getDataY, xMin, xMax){
     .attr('class', 'yaxis axis')
     .attr('transform', `translate(80,0 )`)
     .call(d3.axisLeft(yScale));
-}
-
-function makeScatterplot(){
-  
-}
+}*/
 
 function makeChart1(dataset) {
   let chart1 = d3.select('#chart1');
@@ -142,20 +134,31 @@ function makeChart1(dataset) {
 function makeChart2(dataset) {
   let chart2 = d3.select('#chart2');
   
+  /*
   let xMin = 0;
   //let xMin = 4.5;
   let xMax = d3.max(dataset, (d) => d.average_rating);
   
   makeBarChart(chart2,dataset,'lightblue',(d) => d.average_rating,(d) => d.app_name,xMin,xMax);
+  */
+  let barChart2 =  chartTypes.barChart(dataset,(d) => d.average_rating,(d) => d.app_name);
+  barChart2.color = "lightblue";
+  barChart2.display = barChart2.display.bind(barChart2);
+  barChart2.display(chart2);
 }
 
 function makeChart3(dataset) {
   let chart3 = d3.select("#chart3");
-  
+  /*
   let xMin = 0;
   let xMax = d3.max(dataset, (d) => d.thirty_day_keep);
   
   makeBarChart(chart3,dataset,"lightskyblue",(d) => d.thirty_day_keep,(d) => d.app_name,xMin,xMax);
+  */
+  let barChart3 =  chartTypes.barChart(dataset,(d) => d.thirty_day_keep,(d) => d.app_name);
+  barChart3.color = "lightskyblue";
+  barChart3.display = barChart3.display.bind(barChart3);
+  barChart3.display(chart3);
 }
 
 function makeChart4(dataset) {
