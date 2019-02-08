@@ -43,15 +43,22 @@ let chartTypes = {
         .attr('fill', this.color);
       
       // AXES
+      var xAxis = d3.axisBottom(xScale);
+      if(typeof this.tickFormat !== undefined){
+        xAxis.tickFormat(this.tickFormat);
+      }
+      var yAxis = d3.axisLeft(yScale);
+      
+      
       chart.append('g')
         .attr('class', 'xaxis axis')
         .attr('transform', `translate(80, ${this.height - 20})`)
-        .call(d3.axisBottom(xScale));
+        .call(xAxis);
       
       chart.append('g')
         .attr('class', 'yaxis axis')
         .attr('transform', `translate(80,0 )`)
-        .call(d3.axisLeft(yScale));
+        .call(yAxis);
     };
     return {
       dataset: dataset,
@@ -69,58 +76,6 @@ let chartTypes = {
     };
   }
 };
-/*
-function makeBarChart(chart, dataset, color, getDataX, getDataY, xMin, xMax){
-  
-  let w = 1200;
-  let h = dataset.length * 30;
-  
-  let outerYPadding = 22;
-  let barHeight = 18;
-  
-  // sort the data by downloads
-  // uses built-in Array.sort() with comparator function
-  dataset.sort((a,b) => getDataX(b) - getDataX(a));
-
-  chart.attr('width', w)
-    .attr('height', h);
-
-  // our range is limited from 0 to width - 100, 
-  // which is for the 80 pixels on left for axis and 
-  // 20 pixels on right for padding
-  let xScale = d3.scaleLinear()
-    .domain([xMin,xMax])
-    .rangeRound([0, w - 100]);
-
-  // using scale band to work with nominal values 
-  // the Array.map() call allows us to get a new array
-  // by calling a function on each item of the source array 
-  // here it pulls out the app_name
-  let yScale = d3.scaleBand()
-    .domain(dataset.map(getDataY))
-    .rangeRound([outerYPadding, h - outerYPadding]);
-
-  chart.selectAll('rect')
-    .data(dataset)
-    .enter()
-    .append('rect')
-    .attr('x', 80)
-    .attr('y', (d) => yScale(d.app_name))
-    .attr('width', (d) => xScale(getDataX(d)))
-    .attr('height', barHeight)
-    .attr('fill', color);
-
-  // AXES
-  chart.append('g')
-    .attr('class', 'xaxis axis')
-    .attr('transform', `translate(80, ${h - 20})`)
-    .call(d3.axisBottom(xScale));
-
-  chart.append('g')
-    .attr('class', 'yaxis axis')
-    .attr('transform', `translate(80,0 )`)
-    .call(d3.axisLeft(yScale));
-}*/
 
 function makeChart1(dataset) {
   let chart1 = d3.select('#chart1');
@@ -134,30 +89,19 @@ function makeChart1(dataset) {
 function makeChart2(dataset) {
   let chart2 = d3.select('#chart2');
   
-  /*
-  let xMin = 0;
-  //let xMin = 4.5;
-  let xMax = d3.max(dataset, (d) => d.average_rating);
-  
-  makeBarChart(chart2,dataset,'lightblue',(d) => d.average_rating,(d) => d.app_name,xMin,xMax);
-  */
   let barChart2 =  chartTypes.barChart(dataset,(d) => d.average_rating,(d) => d.app_name);
   barChart2.color = "lightblue";
   barChart2.display = barChart2.display.bind(barChart2);
-  barChart2.display(chart2);
+  barChart2.display(chart2);1
 }
 
 function makeChart3(dataset) {
   let chart3 = d3.select("#chart3");
-  /*
-  let xMin = 0;
-  let xMax = d3.max(dataset, (d) => d.thirty_day_keep);
   
-  makeBarChart(chart3,dataset,"lightskyblue",(d) => d.thirty_day_keep,(d) => d.app_name,xMin,xMax);
-  */
-  let barChart3 =  chartTypes.barChart(dataset,(d) => d.thirty_day_keep,(d) => d.app_name);
+  let barChart3 =  chartTypes.barChart(dataset,(d) => (d.thirty_day_keep/100),(d) => d.app_name);
   barChart3.color = "lightskyblue";
   barChart3.display = barChart3.display.bind(barChart3);
+  barChart3.tickFormat = d3.format(".0%");
   barChart3.display(chart3);
 }
 
