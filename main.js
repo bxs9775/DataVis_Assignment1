@@ -12,7 +12,7 @@ let chartTypes = {
     let display = function(chart){
       console.dir(this);
       
-      this.dataset.sort((a,b) => getDataX(b) - getDataX(a));
+      this.dataset.sort((a,b) => this.getDataX(b) - this.getDataX(a));
       
       chart.attr('width', this.width)
         .attr('height', this.height);
@@ -22,7 +22,7 @@ let chartTypes = {
       // 20 pixels on right for padding
       let xScale = d3.scaleLinear()
       .domain([this.xMin,this.xMax])
-      .rangeRound([0, this.width - this.xPadding]);
+      .rangeRound([0, (this.width - this.xPadding)]);
       
       // using scale band to work with nominal values 
       // the Array.map() call allows us to get a new array
@@ -33,12 +33,16 @@ let chartTypes = {
       .rangeRound([this.yPadding, this.height - this.yPadding]);
       
       chart.selectAll('rect')
-        .data(dataset)
+        .data(this.dataset)
         .enter()
         .append('rect')
         .attr('x', 80)
-        .attr('y', (d) => yScale(d.app_name))
-        .attr('width', (d) => xScale(this.getDataX(d)))
+        .attr('y', (d) => yScale(this.getDataY(d)))
+        .attr('width', (d) => {
+          var w = this.getDataX(d);
+          console.log(w);
+          return xScale(w);
+        })
         .attr('height', this.barHeight)
         .attr('fill', this.color);
       
@@ -55,10 +59,10 @@ let chartTypes = {
     };
     return {
       dataset: dataset,
-      width: 1200,
+      width: 800,
       height: dataset.length * 30,
       yPadding: 22,
-      XPadding: 100,
+      xPadding: 100,
       barHeight: 18,
       color: "blue",
       getDataX: getDataX,
