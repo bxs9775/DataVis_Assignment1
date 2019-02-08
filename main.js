@@ -7,9 +7,10 @@ function rowConverter(row) {
   }
 }
 
-function makeBarChart(chart, dataset, color, getDataX, getDataY){
+
+function makeBarChart(chart, dataset, color, getDataX, getDataY, xMin, xMax){
   
-  let w = 600;
+  let w = 1200;
   let h = dataset.length * 30;
   
   let outerYPadding = 22;
@@ -26,7 +27,7 @@ function makeBarChart(chart, dataset, color, getDataX, getDataY){
   // which is for the 80 pixels on left for axis and 
   // 20 pixels on right for padding
   let xScale = d3.scaleLinear()
-    .domain([0, d3.max(dataset, (d) => getDataX(d))])
+    .domain([xMin,xMax])
     .rangeRound([0, w - 100]);
 
   // using scale band to work with nominal values 
@@ -34,7 +35,7 @@ function makeBarChart(chart, dataset, color, getDataX, getDataY){
   // by calling a function on each item of the source array 
   // here it pulls out the app_name
   let yScale = d3.scaleBand()
-    .domain(dataset.map((d) => getDataY(d)))
+    .domain(dataset.map(getDataY))
     .rangeRound([outerYPadding, h - outerYPadding]);
 
   chart.selectAll('rect')
@@ -59,68 +60,36 @@ function makeBarChart(chart, dataset, color, getDataX, getDataY){
     .call(d3.axisLeft(yScale));
 }
 
-function makeChart1(dataset) {
-/*
-  let w = 600;
-  let h = dataset.length * 30;
+function makeScatterplot(){
   
-  let outerYPadding = 22;
-  let barHeight = 18;
+}
 
-  // sort the data by downloads
-  // uses built-in Array.sort() with comparator function
-  dataset.sort((a,b) => b.downloads - a.downloads);
-
-  let chart1 = d3.select('#chart1')
-    .attr('width', w)
-    .attr('height', h);
-
-  // our range is limited from 0 to width - 100, 
-  // which is for the 80 pixels on left for axis and 
-  // 20 pixels on right for padding
-  let xScale = d3.scaleLinear()
-    .domain([0, d3.max(dataset, (d) => d.downloads)])
-    .rangeRound([0, w - 100]);
-
-  // using scale band to work with nominal values 
-  // the Array.map() call allows us to get a new array
-  // by calling a function on each item of the source array 
-  // here it pulls out the app_name
-  let yScale = d3.scaleBand()
-    .domain(dataset.map((d) => d.app_name))
-    .rangeRound([outerYPadding, h - outerYPadding]);
-
-  chart1.selectAll('rect')
-    .data(dataset)
-    .enter()
-    .append('rect')
-    .attr('x', 80)
-    .attr('y', (d) => yScale(d.app_name))
-    .attr('width', (d) => xScale(d.downloads))
-    .attr('height', barHeight)
-    .attr('fill', (d) => 'cornflowerblue');
-
-  // AXES
-  chart1.append('g')
-    .attr('class', 'xaxis axis')
-    .attr('transform', `translate(80, ${h - 20})`)
-    .call(d3.axisBottom(xScale));
-
-  chart1.append('g')
-    .attr('class', 'yaxis axis')
-    .attr('transform', `translate(80,0 )`)
-    .call(d3.axisLeft(yScale));
-    */
+function makeChart1(dataset) {
   let chart1 = d3.select('#chart1');
-  makeBarChart(chart1,dataset,'cornflowerblue',(d) => d.downloads,(d) => d.app_name);
+  
+  let xMin = 0;
+  let xMax = d3.max(dataset, (d) => d.downloads);
+  
+  makeBarChart(chart1,dataset,'cornflowerblue',(d) => d.downloads,(d) => d.app_name,xMin,xMax);
 }
 
 function makeChart2(dataset) {
   let chart2 = d3.select('#chart2');
-  makeBarChart(chart2,dataset,'lightsteelblue',(d) => d.average_rating,(d) => d.app_name);
+  
+  let xMin = 0;
+  //let xMin = 4.5;
+  let xMax = d3.max(dataset, (d) => d.average_rating);
+  
+  makeBarChart(chart2,dataset,'lightblue',(d) => d.average_rating,(d) => d.app_name,xMin,xMax);
 }
 
 function makeChart3(dataset) {
+  let chart3 = d3.select("#chart3");
+  
+  let xMin = 0;
+  let xMax = d3.max(dataset, (d) => d.thirty_day_keep);
+  
+  makeBarChart(chart3,dataset,"lightskyblue",(d) => d.thirty_day_keep,(d) => d.app_name,xMin,xMax);
 }
 
 function makeChart4(dataset) {
