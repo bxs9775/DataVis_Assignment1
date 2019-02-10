@@ -130,8 +130,8 @@ let chartTypes = {
     };
     return {
       dataset: dataset,
-      width: 800,
-      height: 800,
+      width: 1000,
+      height: 1000,
       yPadding: 20,
       xPaddingLeft: 40,
       xPaddingRight: 80,
@@ -164,7 +164,7 @@ function makeChart2(dataset) {
   let chart2 = d3.select('#chart2');
   
   let barChart2 =  chartTypes.barChart(dataset,(d) => d.average_rating,(d) => d.app_name);
-  barChart2.color = 'lightblue';
+  barChart2.color = 'slateblue';
   barChart2.display = barChart2.display.bind(barChart2);
   barChart2.display(chart2);1
 }
@@ -173,7 +173,7 @@ function makeChart3(dataset) {
   let chart3 = d3.select('#chart3');
   
   let barChart3 =  chartTypes.barChart(dataset,(d) => (d.thirty_day_keep/100),(d) => d.app_name);
-  barChart3.color = 'lightskyblue';
+  barChart3.color = 'darkblue';
   barChart3.display = barChart3.display.bind(barChart3);
   barChart3.tickFormat = d3.format('.0%');
   barChart3.display(chart3);
@@ -183,7 +183,7 @@ function makeChart4(dataset) {
   let chart4 = d3.select('#chart4');
   
   let scatter1 = chartTypes.scatterPlot(dataset,(d) => d.downloads,(d) => d.average_rating);
-  scatter1.color = 'navy(16)';
+  scatter1.color = 'lightblue';
   scatter1.display = scatter1.display.bind(scatter1);
   scatter1.yMin = 4.5;
   scatter1.display(chart4);
@@ -193,7 +193,7 @@ function makeChart5(dataset) {
   let chart5 = d3.select('#chart5');
   
   let scatter2 = chartTypes.scatterPlot(dataset,(d) => d.downloads,(d) => (d.thirty_day_keep/100));
-  scatter2.color = 'darkblue';
+  scatter2.color = 'lightskyblue';
   scatter2.display = scatter2.display.bind(scatter2);
   scatter2.tickFormat = d3.format('.0%');
   scatter2.yMin = .7;
